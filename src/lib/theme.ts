@@ -70,8 +70,8 @@ export const PRESETS: Record<string, { label: string; light: Palette; dark: Pale
 
 export const DEFAULT_THEME: ThemeSettings = {
   default_mode: "light",
-  light: PRESETS.teal.light,
-  dark: PRESETS.teal.dark,
+  light: PRESETS["teal"]!.light,
+  dark: PRESETS["teal"]!.dark,
 };
 
 const HEX = /^#[0-9a-fA-F]{6}$/;

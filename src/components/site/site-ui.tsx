@@ -71,7 +71,7 @@ export function Paragraphs({ text, className }: { text?: string | null; classNam
     <div className={cn("space-y-4 leading-relaxed", className)}>
       {text.split(/\n{2,}/).map((p, i) => {
         const lines = p.split("\n");
-        if (lines.length > 1 && lines[0].length < 60) {
+        if (lines.length > 1 && lines[0]!.length < 60) {
           return (
             <div key={i}>
               <h3 className="font-sans text-base font-semibold text-heading">{lines[0]}</h3>
