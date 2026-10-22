@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppointmentPolicyRouteImport } from './routes/appointment-policy'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DentistsRouteImport } from './routes/dentists'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -36,6 +38,16 @@ const AboutRoute = AboutRouteImport.update({
 const AppointmentPolicyRoute = AppointmentPolicyRouteImport.update({
   id: '/appointment-policy',
   path: '/appointment-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -93,6 +105,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/appointment-policy': typeof AppointmentPolicyRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
   '/faq': typeof FaqRoute
@@ -108,6 +122,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/appointment-policy': typeof AppointmentPolicyRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
   '/faq': typeof FaqRoute
@@ -124,6 +140,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/appointment-policy': typeof AppointmentPolicyRoute
+  '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
   '/faq': typeof FaqRoute
@@ -141,6 +159,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/appointment-policy'
+    | '/auth'
+    | '/book'
     | '/contact'
     | '/dentists'
     | '/faq'
@@ -156,6 +176,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/appointment-policy'
+    | '/auth'
+    | '/book'
     | '/contact'
     | '/dentists'
     | '/faq'
@@ -171,6 +193,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/appointment-policy'
+    | '/auth'
+    | '/book'
     | '/contact'
     | '/dentists'
     | '/faq'
@@ -187,6 +211,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AppointmentPolicyRoute: typeof AppointmentPolicyRoute
+  AuthRoute: typeof AuthRoute
+  BookRoute: typeof BookRoute
   ContactRoute: typeof ContactRoute
   DentistsRoute: typeof DentistsRoute
   FaqRoute: typeof FaqRoute
@@ -220,6 +246,20 @@ declare module '@tanstack/react-router' {
       path: '/appointment-policy'
       fullPath: '/appointment-policy'
       preLoaderRoute: typeof AppointmentPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -299,6 +339,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AppointmentPolicyRoute: AppointmentPolicyRoute,
+  AuthRoute: AuthRoute,
+  BookRoute: BookRoute,
   ContactRoute: ContactRoute,
   DentistsRoute: DentistsRoute,
   FaqRoute: FaqRoute,
