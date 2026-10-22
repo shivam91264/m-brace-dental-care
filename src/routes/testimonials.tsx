@@ -40,11 +40,11 @@ function Testimonials() {
     e.preventDefault();
     const fd = Object.fromEntries(new FormData(e.currentTarget));
     const parsed = schema.safeParse(fd);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     setBusy(true);
     const { error } = await supabase.from("testimonials").insert({ ...parsed.data, rating, review_date: new Date().toISOString().slice(0, 10) });
     setBusy(false);
-    if (error) return toast.error(error.message.includes("Too many") ? error.message : "Could not submit your review. Please try again.");
+    if (error) { toast.error(error.message.includes("Too many") ? error.message : "Could not submit your review. Please try again."); return; }
     setDone(true);
   }
 

@@ -103,10 +103,10 @@ function ThemeAndSchema() {
   const ld = {
     "@context": "https://schema.org",
     "@type": "Dentist",
-    name: clinic.name,
+    name: clinic["name"],
     address: { "@type": "PostalAddress", streetAddress: "Shop No. 110, First Floor, Moti Mahal, near Dhange Hospital, Chudi Mohalla", addressLocality: "Bhiwandi", addressRegion: "Maharashtra", postalCode: "421308", addressCountry: "IN" },
-    ...(clinic.phone ? { telephone: clinic.phone } : {}),
-    ...(clinic.email ? { email: clinic.email } : {}),
+    ...(clinic["phone"] ? { telephone: clinic["phone"] } : {}),
+    ...(clinic["email"] ? { email: clinic["email"] } : {}),
   };
   return (
     <>

@@ -72,7 +72,7 @@ function Home() {
         <section className="container-page pb-6">
           <div className="grid gap-4 sm:grid-cols-3">
             {content.highlights.map((h, i) => {
-              const Icon = icons[i % icons.length];
+              const Icon = icons[i % icons.length]!;
               return (
                 <div key={i} className="card-surface flex items-center gap-4 p-5">
                   <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"><Icon className="size-5" /></span>

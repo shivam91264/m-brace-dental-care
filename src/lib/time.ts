@@ -15,7 +15,7 @@ export function nowMinutesInClinic(d = new Date()) {
 }
 
 export const toMin = (t: string) => {
-  const [h, m] = t.split(":").map(Number);
+  const [h = 0, m = 0] = t.split(":").map(Number);
   return h * 60 + (m || 0);
 };
 export const fromMin = (n: number) => `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
@@ -28,17 +28,17 @@ export function fmtTime(t: string) {
 }
 
 export function fmtDate(d: string) {
-  const [y, m, day] = d.split("-").map(Number);
+  const [y = 0, m = 1, day = 1] = d.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, day)).toLocaleDateString("en-IN", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short", year: "numeric" });
 }
 
 export function weekdayKey(date: string) {
-  const [y, m, d] = date.split("-").map(Number);
-  return ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+  const [y = 0, m = 1, d = 1] = date.split("-").map(Number);
+  return ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][new Date(Date.UTC(y, m - 1, d)).getUTCDay()]!;
 }
 
 export function addDays(date: string, n: number) {
-  const [y, m, d] = date.split("-").map(Number);
+  const [y = 0, m = 1, d = 1] = date.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
 }
 

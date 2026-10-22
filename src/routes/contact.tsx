@@ -47,7 +47,7 @@ function Contact() {
     setBusy(true);
     const { error } = await supabase.from("enquiries").insert({ ...parsed.data, phone: parsed.data.phone || null });
     setBusy(false);
-    if (error) return toast.error(error.message.includes("Too many") ? error.message : "Sorry, your message could not be sent. Please try again.");
+    if (error) { toast.error(error.message.includes("Too many") ? error.message : "Sorry, your message could not be sent. Please try again."); return; }
     setSent(true);
   }
 
@@ -81,10 +81,10 @@ function Contact() {
             </div>
           ) : (
             <form onSubmit={submit} noValidate className="grid gap-4 sm:grid-cols-2">
-              {field("name", "Name", <Input id="c-name" name="name" autoComplete="name" maxLength={100} aria-invalid={!!errors.name} />)}
-              {field("email", "Email", <Input id="c-email" name="email" type="email" autoComplete="email" maxLength={255} aria-invalid={!!errors.email} />)}
+              {field("name", "Name", <Input id="c-name" name="name" autoComplete="name" maxLength={100} aria-invalid={!!errors["name"]} />)}
+              {field("email", "Email", <Input id="c-email" name="email" type="email" autoComplete="email" maxLength={255} aria-invalid={!!errors["email"]} />)}
               <div className="sm:col-span-2">{field("phone", "Phone (optional)", <Input id="c-phone" name="phone" type="tel" autoComplete="tel" maxLength={20} />)}</div>
-              <div className="sm:col-span-2">{field("message", "Message", <Textarea id="c-message" name="message" rows={6} maxLength={2000} aria-invalid={!!errors.message} />)}</div>
+              <div className="sm:col-span-2">{field("message", "Message", <Textarea id="c-message" name="message" rows={6} maxLength={2000} aria-invalid={!!errors["message"]} />)}</div>
               <div className="sm:col-span-2"><Button type="submit" variant="hero" size="lg" disabled={busy}>{busy ? "Sending…" : "Send message"}</Button></div>
             </form>
           )}
