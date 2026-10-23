@@ -1,0 +1,14 @@
+import { Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { Menu, LogOut, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Sheet,SheetContent,SheetTitle,SheetTrigger } from '@/components/ui/sheet';
+import { accountQuery } from '@/lib/account';
+import { MODULES,canManage } from '@/lib/admin-config';
+import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
+export function AdminShell(){const {data:a}=useSuspenseQuery(accountQuery);const q=useQueryClient(),navigate=useNavigate();const [open,setOpen]=useState(false);
+ const links=<nav aria-label="Staff navigation" className="space-y-1"><Link to="/admin" className="admin-nav" onClick={()=>setOpen(false)}>Overview</Link>{Object.entries(MODULES).filter(([,m])=>canManage(a?.roles??[],m)).map(([k,m])=><Link key={k} to="/admin/$section" params={{section:k}} className="admin-nav" activeProps={{className:'bg-accent text-primary'}} onClick={()=>setOpen(false)}>{m.title}</Link>)}{a?.roles.includes('super_admin')&&<><Link to="/admin/$section" params={{section:'content'}} className="admin-nav">Website content</Link><Link to="/admin/$section" params={{section:'appearance'}} className="admin-nav">Appearance</Link></>}{a?.roles.some(r=>['super_admin','admin'].includes(r))&&<Link to="/admin/$section" params={{section:'schedule'}} className="admin-nav">Opening hours</Link>}<Link to="/admin/$section" params={{section:'account'}} className="admin-nav">My account</Link></nav>;
+ async function logout(){await q.cancelQueries();q.clear();await supabase.auth.signOut();navigate({to:'/auth',replace:true});}
+ return <div className="min-h-screen bg-background lg:grid lg:grid-cols-[240px_minmax(0,1fr)]"><aside className="hidden border-r border-border bg-card p-6 lg:block"><p className="mb-8 font-display text-2xl">M'brace</p>{links}</aside><div className="min-w-0"><header className="flex items-center justify-between gap-3 border-b border-border bg-header px-5 py-4"><div className="flex items-center gap-3"><Sheet open={open} onOpenChange={setOpen}><SheetTrigger asChild><Button size="icon" variant="outline" className="lg:hidden" aria-label="Staff menu"><Menu /></Button></SheetTrigger><SheetContent side="left"><SheetTitle>M'brace staff</SheetTitle><div className="mt-6">{links}</div></SheetContent></Sheet><p className="text-sm font-medium">{a?.profile?.full_name || 'Clinic staff'}</p></div><div className="flex gap-2"><Button asChild variant="outline" size="icon" title="View website"><Link to="/"><ExternalLink /></Link></Button><Button onClick={logout} variant="outline" size="icon" aria-label="Sign out"><LogOut /></Button></div></header><main className="p-5 md:p-8"><Outlet /></main></div></div>;
+}

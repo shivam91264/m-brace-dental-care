@@ -1,0 +1,3 @@
+import {createFileRoute} from "@tanstack/react-router";
+import {AuthForm} from "@/components/admin/AuthForm";
+export const Route=createFileRoute("/forgot-password")({head:()=>({meta:[{title:"Password Recovery | M'brace Dental Clinic"},{name:"description",content:"Password Recovery for M'brace Dental Clinic staff."},{property:"og:title",content:"Password Recovery | M'brace"},{property:"og:description",content:"Secure clinic staff account access."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"},{name:"robots",content:"noindex"}]}),component:()=> <AuthForm mode="forgot"/>});
