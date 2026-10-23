@@ -1,19 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/site/site-ui";
-
-export const Route = createFileRoute("/auth")({
-  head: () => ({
-    meta: [
-      { title: "Staff Login | M'brace Dental Clinic" },
-      { name: "description", content: "Staff sign-in for M'brace Dental Clinic." },
-      { property: "og:title", content: "Staff Login | M'brace Dental Clinic" },
-      { property: "og:description", content: "Staff sign-in." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  component: () => (
-    <>
-      <PageHeader eyebrow="Staff" title="Staff login" text="The staff sign-in and admin dashboard are not finished yet." />
-    </>
-  ),
-});
+import {createFileRoute} from "@tanstack/react-router";
+import {AuthForm} from "@/components/admin/AuthForm";
+export const Route=createFileRoute("/auth")({head:()=>({meta:[{title:"Staff Login | M'brace Dental Clinic"},{name:"description",content:"Staff Login for M'brace Dental Clinic staff."},{property:"og:title",content:"Staff Login | M'brace"},{property:"og:description",content:"Secure clinic staff account access."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"},{name:"robots",content:"noindex"}]}),component:()=> <AuthForm mode="login"/>});
