@@ -13,7 +13,6 @@ export const NAV = [
   { key: "gallery", to: "/gallery", label: "Gallery" },
   { key: "testimonials", to: "/testimonials", label: "Reviews" },
   { key: "blog", to: "/blog", label: "Blog" },
-  { key: "faq", to: "/faq", label: "FAQ" },
   { key: "contact", to: "/contact", label: "Contact" },
 ] as const;
 

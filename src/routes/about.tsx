@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { dentistsQuery, galleryQuery, useSite } from "@/lib/queries";
-import { PageHeader, SectionTitle } from "@/components/site/site-ui";
+import { dentistsQuery, faqsQuery, galleryQuery, useSite } from "@/lib/queries";
+import { EmptyState, PageHeader, SectionTitle } from "@/components/site/site-ui";
 import { DentistCard } from "@/components/site/cards";
 
 export const Route = createFileRoute("/about")({
-  loader: ({ context: { queryClient: q } }) => Promise.all([q.ensureQueryData(dentistsQuery), q.ensureQueryData(galleryQuery)]),
+  loader: ({ context: { queryClient: q } }) => Promise.all([q.ensureQueryData(dentistsQuery), q.ensureQueryData(galleryQuery), q.ensureQueryData(faqsQuery)]),
   head: () => ({
     meta: [
       { title: "About Us | M'brace Dental Clinic Bhiwandi" },
@@ -22,6 +23,7 @@ function About() {
   const { content } = useSite();
   const { data: dentists } = useSuspenseQuery(dentistsQuery);
   const { data: gallery } = useSuspenseQuery(galleryQuery);
+  const { data: faqs } = useSuspenseQuery(faqsQuery);
   return (
     <>
       <PageHeader eyebrow="About us" title={content.about_title} text={content.about_text}>
@@ -57,6 +59,25 @@ function About() {
           </div>
         </section>
       )}
+      <section className="section-y bg-muted" id="faq">
+        <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+          <div>
+            <SectionTitle eyebrow="FAQ" title="Frequently asked questions" />
+            <p className="mt-3 text-muted-foreground">Still have a question?</p>
+            <Button asChild variant="hero" className="mt-3"><Link to="/contact">Contact us</Link></Button>
+          </div>
+          {faqs.length === 0 ? <EmptyState title="FAQs coming soon" /> : (
+            <Accordion type="single" collapsible className="card-surface px-6">
+              {faqs.map((f) => (
+                <AccordionItem key={f.id} value={f.id}>
+                  <AccordionTrigger className="text-left text-base">{f.question}</AccordionTrigger>
+                  <AccordionContent className="whitespace-pre-line text-muted-foreground">{f.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
+        </div>
+      </section>
     </>
   );
 }
