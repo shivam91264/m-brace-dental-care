@@ -163,7 +163,7 @@ function Home() {
           <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.4fr]">
             <div>
               <SectionTitle eyebrow="FAQ" title="Common questions" />
-              <Button asChild variant="link" className="mt-3 px-0"><Link to="/faq">See all FAQs <ArrowRight /></Link></Button>
+              <Button asChild variant="link" className="mt-3 px-0"><Link to="/about" hash="faq">See all FAQs <ArrowRight /></Link></Button>
             </div>
             <Accordion type="single" collapsible className="card-surface px-6">
               {faqs.slice(0, 5).map((f) => (

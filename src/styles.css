@@ -201,6 +201,20 @@
   animation: fade-up 0.6s ease both;
 }
 
+@utility admin-nav {
+  display: block;
+  border-radius: var(--radius-lg);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  &:hover {
+    background: var(--color-accent);
+    color: var(--color-primary);
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
