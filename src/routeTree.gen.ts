@@ -17,7 +17,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DentistsRouteImport } from './routes/dentists'
-import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -67,11 +66,6 @@ const ContactRoute = ContactRouteImport.update({
 const DentistsRoute = DentistsRouteImport.update({
   id: '/dentists',
   path: '/dentists',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -138,7 +132,6 @@ export interface FileRoutesByFullPath {
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
-  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
@@ -159,7 +152,6 @@ export interface FileRoutesByTo {
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
-  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
@@ -182,7 +174,6 @@ export interface FileRoutesById {
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
   '/dentists': typeof DentistsRoute
-  '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
@@ -205,7 +196,6 @@ export interface FileRouteTypes {
     | '/book'
     | '/contact'
     | '/dentists'
-    | '/faq'
     | '/forgot-password'
     | '/gallery'
     | '/privacy'
@@ -226,7 +216,6 @@ export interface FileRouteTypes {
     | '/book'
     | '/contact'
     | '/dentists'
-    | '/faq'
     | '/forgot-password'
     | '/gallery'
     | '/privacy'
@@ -248,7 +237,6 @@ export interface FileRouteTypes {
     | '/book'
     | '/contact'
     | '/dentists'
-    | '/faq'
     | '/forgot-password'
     | '/gallery'
     | '/privacy'
@@ -271,7 +259,6 @@ export interface RootRouteChildren {
   BookRoute: typeof BookRoute
   ContactRoute: typeof ContactRoute
   DentistsRoute: typeof DentistsRoute
-  FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GalleryRoute: typeof GalleryRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -340,13 +327,6 @@ declare module '@tanstack/react-router' {
       path: '/dentists'
       fullPath: '/dentists'
       preLoaderRoute: typeof DentistsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -449,7 +429,6 @@ const rootRouteChildren: RootRouteChildren = {
   BookRoute: BookRoute,
   ContactRoute: ContactRoute,
   DentistsRoute: DentistsRoute,
-  FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GalleryRoute: GalleryRoute,
   PrivacyRoute: PrivacyRoute,
