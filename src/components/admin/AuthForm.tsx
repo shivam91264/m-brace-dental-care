@@ -10,6 +10,8 @@ import { accountQuery } from '@/lib/account';
 export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
  const account=useQuery({...accountQuery,enabled:mode==='login'}),q=useQueryClient(),navigate=useNavigate();
+ const setup=useQuery({queryKey:['setup-available'],enabled:mode==='login'&&!!account.data&&account.data.profile?.status!=='approved',queryFn:async()=>{const {data,error}=await supabase.rpc('setup_available');if(error)return false;return Boolean(data);}});
+ async function claimSetup(){setBusy(true);try{const {error}=await supabase.rpc('claim_first_super_admin');if(error)throw error;await q.invalidateQueries({queryKey:['account']});toast.success('You are now the Super Admin.');navigate({to:'/admin'});}catch(err){toast.error(err instanceof Error?err.message:'Setup failed');}finally{setBusy(false);}}
  async function signOut(){await q.cancelQueries();q.clear();await supabase.auth.signOut();navigate({to:'/auth',replace:true});}
  async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();const d=new FormData(e.currentTarget);const email=String(d.get('email')??'').trim(),password=String(d.get('password')??'');
  if((mode==='register'||mode==='reset')&&password!==d.get('confirm')){toast.error('Passwords do not match');return;}
@@ -21,7 +23,7 @@ export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  }catch(err){toast.error(err instanceof Error?err.message:'Unable to continue. Please try again.');}finally{setBusy(false);}}
  const title={login:'Staff sign in',register:'Request staff access',forgot:'Forgot password',reset:'Set a new password'}[mode];
  return <section className="container-page max-w-lg py-14"><h1 className="text-3xl">{title}</h1>{message&&<p role="status" className="mt-5 rounded-lg bg-accent p-4 text-accent-foreground">{message}</p>}
- {mode==='login'&&account.data?<div className="mt-6 space-y-4"><p>{account.data.profile?.full_name} · {account.data.profile?.status}</p>{account.data.profile?.status==='approved'&&account.data.roles.length>0&&<Button asChild><Link to="/admin">Open dashboard</Link></Button>}<Button variant="outline" onClick={signOut}>Sign out</Button></div>:<form onSubmit={submit} className="mt-6 space-y-5">
+ {mode==='login'&&account.data?<div className="mt-6 space-y-4"><p>{account.data.profile?.full_name} · {account.data.profile?.status}</p>{account.data.profile?.status==='approved'&&account.data.roles.length>0&&<Button asChild><Link to="/admin">Open dashboard</Link></Button>}{setup.data&&<div className="rounded-lg border border-border bg-card p-4"><p className="text-sm text-muted-foreground">No Super Admin exists yet. As the first staff account, you can claim this role once.</p><Button className="mt-3" onClick={claimSetup} disabled={busy}>{busy?'Setting up…':'Become the Super Admin'}</Button></div>}<Button variant="outline" onClick={signOut}>Sign out</Button></div>:<form onSubmit={submit} className="mt-6 space-y-5">
  {mode==='register'&&<div><Label htmlFor="name">Full name</Label><Input id="name" name="name" required maxLength={120} autoComplete="name" /></div>}
  {mode!=='reset'&&<div><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" required autoComplete="email" /></div>}
  {mode!=='forgot'&&<div><Label htmlFor="password">Password</Label><Input id="password" name="password" type="password" minLength={8} required autoComplete={mode==='login'?'current-password':'new-password'} /></div>}

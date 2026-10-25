@@ -64,7 +64,7 @@ function FieldInput({ f, row }: { f: Field; row: Row | null }) {
     );
   if (f.options)
     return (
-      <Select name={f.key} defaultValue={v ? String(v) : undefined}>
+      <Select name={f.key} {...(v ? { defaultValue: String(v) } : {})}>
         <SelectTrigger id={f.key}><SelectValue placeholder="Select…" /></SelectTrigger>
         <SelectContent>{f.options.map((o) => <SelectItem key={o} value={o}>{o.replaceAll("_", " ")}</SelectItem>)}</SelectContent>
       </Select>
@@ -146,8 +146,8 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
     }
     setBusy(true);
     try {
-      if (editing && editing !== "new" && editing.id) {
-        const { error } = await supabase.from(m.table).update(row as never).eq("id", editing.id);
+      if (editing && editing !== "new" && editing["id"]) {
+        const { error } = await supabase.from(m.table).update(row as never).eq("id", editing["id"]);
         if (error) throw error;
       } else {
         const { error } = await supabase.from(m.table).insert(row as never);
@@ -168,7 +168,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
     if (!deleting) return;
     setBusy(true);
     try {
-      const { error } = await supabase.from(m.table).delete().eq("id", deleting.id);
+      const { error } = await supabase.from(m.table).delete().eq("id", deleting["id"]);
       if (error) throw error;
       toast.success("Deleted");
       setDeleting(null);
@@ -199,13 +199,13 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
           </thead>
           <tbody className="divide-y divide-border">
             {filtered.map((r) => (
-              <tr key={r.id}>
+              <tr key={r["id"]}>
                 <td className="px-5 py-3 font-medium">{String(r[m.label] ?? "—")}</td>
                 <td className="px-5 py-3 text-muted-foreground">
-                  {m.table === "appointments" && `${r.appointment_date} ${String(r.start_time ?? "").slice(0, 5)} · ${r.status}`}
-                  {m.table === "testimonials" && `${r.status}${r.published ? " · published" : ""}`}
-                  {m.table === "profiles" && String(r.status ?? "")}
-                  {!["appointments", "testimonials", "profiles"].includes(m.table) && (r.published === false ? "Hidden" : "Published")}
+                  {m.table === "appointments" && `${r["appointment_date"]} ${String(r["start_time"] ?? "").slice(0, 5)} · ${r["status"]}`}
+                  {m.table === "testimonials" && `${r["status"]}${r["published"] ? " · published" : ""}`}
+                  {m.table === "profiles" && String(r["status"] ?? "")}
+                  {!["appointments", "testimonials", "profiles"].includes(m.table) && (r["published"] === false ? "Hidden" : "Published")}
                 </td>
                 <td className="px-5 py-3">
                   <div className="flex justify-end gap-1">

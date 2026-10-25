@@ -1,6 +1,10 @@
 # Website completion
-- [ ] Finish staff sign-in, registration, recovery and account pages.
-- [ ] Finish protected management pages, editing, uploads and deletion confirmations.
-- [ ] Connect staff permissions, user approval, scheduling and saved appearance settings.
-- [ ] Verify public submissions, private access, mobile layouts and tests.
-- [ ] Document owner setup, contact details, confirmed hours and optional email configuration.
+- [x] Staff sign-in, registration, recovery and account pages.
+- [x] Protected management pages, editing, uploads and deletion confirmations.
+- [x] Staff permissions, user approval, scheduling and saved appearance settings.
+- [x] FAQ moved onto the About page; standalone FAQ page removed.
+- [x] First Super Admin one-time setup (claim flow on the sign-in page).
+- [x] Public booking verified end to end; double-booking prevented by the database.
+- [x] Public pages, private access and tests verified.
+- [ ] Owner to enter real contact details, confirmed weekly hours and dentist profiles in the dashboard.
+- [ ] Email delivery for password-reset links needs a configured email sender (works once email is set up).
