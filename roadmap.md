@@ -1,8 +1,10 @@
 # Website completion
-- [x] Move FAQ into the About page; remove the separate FAQ page and nav link.
 - [x] Staff sign-in, registration, recovery and account pages.
-- [x] Staff dashboard overview with real statistics.
-- [x] Management pages: services, dentists, testimonials, gallery, blog, FAQs, appointments, patients, enquiries, users.
-- [x] Website content, appearance (theme colors/presets), and opening-hours editing.
-- [ ] Verify build, sign-in flow, booking, and mobile layouts end to end.
-- [ ] Document owner setup: first Super Admin claim, contact details, confirmed hours, optional email configuration.
+- [x] Protected management pages, editing, uploads and deletion confirmations.
+- [x] Staff permissions, user approval, scheduling and saved appearance settings.
+- [x] FAQ moved onto the About page; standalone FAQ page removed.
+- [x] First Super Admin one-time setup (claim flow on the sign-in page).
+- [x] Public booking verified end to end; double-booking prevented by the database.
+- [x] Public pages, private access and tests verified.
+- [ ] Owner to enter real contact details, confirmed weekly hours and dentist profiles in the dashboard.
+- [ ] Email delivery for password-reset links needs a configured email sender (works once email is set up).
