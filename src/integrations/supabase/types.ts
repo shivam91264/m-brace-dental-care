@@ -445,14 +445,14 @@ export type Database = {
     Functions: {
       book_appointment: {
         Args: {
-          p_date: string
-          p_dentist: string
-          p_email: string
-          p_message: string
-          p_name: string
-          p_phone: string
-          p_service: string
-          p_time: string
+          p_date?: string
+          p_dentist?: string
+          p_email?: string
+          p_message?: string
+          p_name?: string
+          p_phone?: string
+          p_service?: string
+          p_time?: string
         }
         Returns: string
       }
