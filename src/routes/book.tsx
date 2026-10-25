@@ -14,7 +14,7 @@ import { addDays, availableSlots, fmtTime, todayInClinic } from "@/lib/time";
 import { PageHeader } from "@/components/site/site-ui";
 
 export const Route = createFileRoute("/book")({
-  validateSearch: (s: Record<string, unknown>) => ({ service: typeof s["service"] === "string" ? s["service"] : undefined }),
+  validateSearch: (s: Record<string, unknown>) => (typeof s["service"] === "string" ? { service: s["service"] } : {}),
   loader: ({ context: { queryClient: q } }) => Promise.all([q.ensureQueryData(servicesQuery), q.ensureQueryData(dentistsQuery)]),
   head: () => ({
     meta: [
@@ -51,7 +51,7 @@ function Book() {
     queryKey: ["booked", date, dentist],
     enabled: !!date,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_booked_slots", { p_date: date, p_dentist: dentist || undefined });
+      const { data, error } = await supabase.rpc("get_booked_slots", { p_date: date, ...(dentist ? { p_dentist: dentist } : {}) });
       if (error) throw error;
       return (data ?? []).map((r: { start_time: string }) => r.start_time);
     },

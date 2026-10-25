@@ -91,7 +91,7 @@ function Overview() {
         <section className="card-surface p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl">Recent appointments</h2>
-            {canManage(roles, MODULES.appointments) && (
+            {canManage(roles, MODULES["appointments"]!) && (
               <Button asChild variant="link" className="px-0"><Link to="/admin/$section" params={{ section: "appointments" }}>Manage <ArrowRight /></Link></Button>
             )}
           </div>
@@ -112,9 +112,9 @@ function Overview() {
         <section className="card-surface p-6">
           <h2 className="text-xl">Quick actions</h2>
           <div className="mt-4 flex flex-wrap gap-3">
-            {canManage(roles, MODULES.appointments) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "appointments" }}>Appointments</Link></Button>}
-            {canManage(roles, MODULES.enquiries) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "enquiries" }}>Enquiries</Link></Button>}
-            {canManage(roles, MODULES.testimonials) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "testimonials" }}>Reviews</Link></Button>}
+            {canManage(roles, MODULES["appointments"]!) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "appointments" }}>Appointments</Link></Button>}
+            {canManage(roles, MODULES["enquiries"]!) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "enquiries" }}>Enquiries</Link></Button>}
+            {canManage(roles, MODULES["testimonials"]!) && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "testimonials" }}>Reviews</Link></Button>}
             {roles.includes("super_admin") && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "users" }}>User approvals</Link></Button>}
             {roles.includes("super_admin") && <Button asChild variant="outline"><Link to="/admin/$section" params={{ section: "content" }}>Website content</Link></Button>}
           </div>
