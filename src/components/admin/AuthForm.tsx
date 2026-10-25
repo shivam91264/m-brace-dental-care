@@ -10,6 +10,8 @@ import { accountQuery } from '@/lib/account';
 export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
  const account=useQuery({...accountQuery,enabled:mode==='login'}),q=useQueryClient(),navigate=useNavigate();
+ const setup=useQuery({queryKey:['setup-available'],enabled:mode==='login'&&!!account.data&&account.data.profile?.status!=='approved',queryFn:async()=>{const {data,error}=await supabase.rpc('setup_available');if(error)return false;return Boolean(data);}});
+ async function claimSetup(){setBusy(true);try{const {error}=await supabase.rpc('claim_first_super_admin');if(error)throw error;await q.invalidateQueries({queryKey:['account']});toast.success('You are now the Super Admin.');navigate({to:'/admin'});}catch(err){toast.error(err instanceof Error?err.message:'Setup failed');}finally{setBusy(false);}}
  async function signOut(){await q.cancelQueries();q.clear();await supabase.auth.signOut();navigate({to:'/auth',replace:true});}
  async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();const d=new FormData(e.currentTarget);const email=String(d.get('email')??'').trim(),password=String(d.get('password')??'');
  if((mode==='register'||mode==='reset')&&password!==d.get('confirm')){toast.error('Passwords do not match');return;}
