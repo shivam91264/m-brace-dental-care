@@ -202,7 +202,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
               <tr key={r["id"]}>
                 <td className="px-5 py-3 font-medium">{String(r[m.label] ?? "—")}</td>
                 <td className="px-5 py-3 text-muted-foreground">
-                  {m.table === "appointments" && `${r["appointment_date"]} ${String(r["start_time"] ?? "").slice(0, 5)} · ${r.status}`}
+                  {m.table === "appointments" && `${r["appointment_date"]} ${String(r["start_time"] ?? "").slice(0, 5)} · ${r["status"]}`}
                   {m.table === "testimonials" && `${r["status"]}${r["published"] ? " · published" : ""}`}
                   {m.table === "profiles" && String(r["status"] ?? "")}
                   {!["appointments", "testimonials", "profiles"].includes(m.table) && (r["published"] === false ? "Hidden" : "Published")}
