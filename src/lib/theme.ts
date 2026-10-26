@@ -1,8 +1,11 @@
 export const COLOR_KEYS = [
   ["primary", "Primary color"],
+  ["primary_hover", "Primary hover"],
   ["secondary", "Secondary color"],
   ["accent", "Accent color"],
   ["background", "Background"],
+  ["card", "Card background"],
+  ["alternate", "Alternate section"],
   ["heading", "Heading color"],
   ["text", "Body text"],
   ["muted", "Secondary text"],
@@ -19,16 +22,25 @@ export type Palette = Record<ColorKey, string>;
 export type ThemeSettings = { default_mode: "light" | "dark"; light: Palette; dark: Palette };
 
 const DARK_DEFAULT: Palette = {
-  primary: "#3FBAC6", secondary: "#7FD4DC", accent: "#123B40", background: "#0E171B",
+  primary: "#3FBAC6", primary_hover: "#7FD4DC", card: "#131F24", alternate: "#182A30", secondary: "#7FD4DC", accent: "#C6A76B", background: "#0E171B",
   heading: "#EEF5F7", text: "#DCE6EA", muted: "#93A3AC", button_bg: "#3FBAC6",
   button_text: "#0E171B", header_bg: "#121E23", footer_bg: "#0A1215", footer_text: "#DCE6EA",
   border: "#24343B",
 };
 
+const PREMIUM_LIGHT: Palette = {
+  primary: "#0F4C5C", primary_hover: "#0A3945", secondary: "#163A43", accent: "#C6A76B",
+  background: "#FAF9F6", card: "#FFFFFF", alternate: "#F1EEE7", heading: "#202B30",
+  text: "#59666B", muted: "#59666B", button_bg: "#0F4C5C", button_text: "#FFFFFF",
+  header_bg: "#FAF9F6", footer_bg: "#163A43", footer_text: "#F8FAFA", border: "#E3E8E8",
+};
+
 export const PRESETS: Record<string, { label: string; light: Palette; dark: Palette }> = {
+  premium: { label: "Premium Teal & Gold", light: PREMIUM_LIGHT, dark: DARK_DEFAULT },
   teal: {
     label: "Dental Teal",
     light: {
+      primary_hover: "#075E68", card: "#FFFFFF", alternate: "#EEF8F5",
       primary: "#087F8C", secondary: "#075E68", accent: "#DDF5F0", background: "#F8FBFC",
       heading: "#202B33", text: "#202B33", muted: "#64727C", button_bg: "#087F8C",
       button_text: "#FFFFFF", header_bg: "#FFFFFF", footer_bg: "#075E68", footer_text: "#FFFFFF",
@@ -39,6 +51,7 @@ export const PRESETS: Record<string, { label: string; light: Palette; dark: Pale
   blue: {
     label: "Medical Blue",
     light: {
+      primary_hover: "#123E7C", card: "#FFFFFF", alternate: "#EDF3FA",
       primary: "#1D5FBF", secondary: "#123E7C", accent: "#E3EEFB", background: "#F7F9FC",
       heading: "#16213A", text: "#1F2A3D", muted: "#5F6B7E", button_bg: "#1D5FBF",
       button_text: "#FFFFFF", header_bg: "#FFFFFF", footer_bg: "#123E7C", footer_text: "#FFFFFF",
@@ -49,6 +62,7 @@ export const PRESETS: Record<string, { label: string; light: Palette; dark: Pale
   mint: {
     label: "Fresh Mint",
     light: {
+      primary_hover: "#13644D", card: "#FFFFFF", alternate: "#ECF8F1",
       primary: "#1E9E78", secondary: "#13644D", accent: "#E2F7EE", background: "#F7FCFA",
       heading: "#1B2C26", text: "#1F2D28", muted: "#5F7069", button_bg: "#1E9E78",
       button_text: "#FFFFFF", header_bg: "#FFFFFF", footer_bg: "#13644D", footer_text: "#FFFFFF",
@@ -59,6 +73,7 @@ export const PRESETS: Record<string, { label: string; light: Palette; dark: Pale
   neutral: {
     label: "Elegant Neutral",
     light: {
+      primary_hover: "#2F2A24", card: "#FFFFFF", alternate: "#F1ECE4",
       primary: "#5B5246", secondary: "#2F2A24", accent: "#F1ECE4", background: "#FBFAF7",
       heading: "#221F1B", text: "#2A2622", muted: "#736B61", button_bg: "#2F2A24",
       button_text: "#FFFFFF", header_bg: "#FFFFFF", footer_bg: "#2F2A24", footer_text: "#F1ECE4",
@@ -70,8 +85,8 @@ export const PRESETS: Record<string, { label: string; light: Palette; dark: Pale
 
 export const DEFAULT_THEME: ThemeSettings = {
   default_mode: "light",
-  light: PRESETS["teal"]!.light,
-  dark: PRESETS["teal"]!.dark,
+  light: PREMIUM_LIGHT,
+  dark: DARK_DEFAULT,
 };
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
@@ -93,18 +108,19 @@ export function sanitizeTheme(raw: unknown): ThemeSettings {
   };
 }
 
-function vars(p: Palette, card: string) {
+function vars(p: Palette) {
   return [
     `--c-primary:${p.primary}`, `--c-secondary:${p.secondary}`, `--c-accent:${p.accent}`,
+    `--c-primary-hover:${p.primary_hover}`, `--c-alternate:${p.alternate}`,
     `--c-background:${p.background}`, `--c-heading:${p.heading}`, `--c-text:${p.text}`,
     `--c-muted:${p.muted}`, `--c-button-bg:${p.button_bg}`, `--c-button-text:${p.button_text}`,
     `--c-header-bg:${p.header_bg}`, `--c-footer-bg:${p.footer_bg}`, `--c-footer-text:${p.footer_text}`,
-    `--c-border:${p.border}`, `--c-card:${card}`,
+    `--c-border:${p.border}`, `--c-card:${p.card}`,
   ].join(";");
 }
 
 export function themeToCss(t: ThemeSettings, scope = ":root") {
   const s = sanitizeTheme(t);
   const darkScope = scope === ":root" ? ".dark" : `.dark ${scope}, ${scope}.dark`;
-  return `${scope}{${vars(s.light, "#FFFFFF")}}${darkScope}{${vars(s.dark, s.dark.header_bg)}}`;
+  return `${scope}{${vars(s.light)}}${darkScope}{${vars(s.dark)}}`;
 }

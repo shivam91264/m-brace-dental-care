@@ -60,10 +60,6 @@ function Home() {
           <div className="relative">
             <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-accent" aria-hidden />
             <img src={content.hero_image || "/images/hero.jpg"} alt="Smiling patient in a modern dental clinic" width={1600} height={1104} fetchPriority="high" className="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-soft" />
-            <div className="card-surface absolute -bottom-5 left-5 hidden items-center gap-3 px-5 py-4 sm:flex">
-              <span className="grid size-10 place-items-center rounded-full bg-accent text-accent-foreground"><ShieldCheck className="size-5" /></span>
-              <div className="text-sm"><p className="font-semibold text-heading">Hygiene first</p><p className="text-muted-foreground">Sterilised for every patient</p></div>
-            </div>
           </div>
         </div>
       </section>
@@ -184,7 +180,7 @@ function Home() {
               <h2 className="text-3xl text-secondary-foreground md:text-4xl">Ready for a healthier smile?</h2>
               <p className="mt-3 opacity-85">Request an appointment online and our team will confirm your visit.</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="rounded-full bg-card text-primary hover:bg-card/90"><Link to="/book">Book Appointment</Link></Button>
+                <Button asChild size="lg" className="rounded-full"><Link to="/book">Book Appointment</Link></Button>
                 <Button asChild size="lg" variant="outline" className="rounded-full border-current/40 bg-transparent text-secondary-foreground hover:bg-card/10 hover:text-secondary-foreground">
                   <a href={clinic.maps_url} target="_blank" rel="noopener noreferrer"><Navigation />Get directions</a>
                 </Button>

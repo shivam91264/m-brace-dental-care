@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep all appearance roles, including primary hover, card and alternate-section backgrounds, in the shared editable palette and CSS tokens so saved themes consistently control public and staff pages.
