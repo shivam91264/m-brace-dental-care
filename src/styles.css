@@ -27,6 +27,7 @@
   --color-popover: var(--card);
   --color-popover-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--c-primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -62,19 +63,21 @@
 
 :root {
   --radius: 0.875rem;
-  --c-primary: #087f8c;
-  --c-secondary: #075e68;
-  --c-accent: #ddf5f0;
-  --c-background: #f8fbfc;
-  --c-heading: #202b33;
-  --c-text: #202b33;
-  --c-muted: #64727c;
-  --c-button-bg: #087f8c;
+  --c-primary: oklch(from #0f4c5c l c h);
+  --c-primary-hover: oklch(from #0a3945 l c h);
+  --c-secondary: oklch(from #163a43 l c h);
+  --c-accent: oklch(from #c6a76b l c h);
+  --c-background: oklch(from #faf9f6 l c h);
+  --c-alternate: oklch(from #f1eee7 l c h);
+  --c-heading: oklch(from #202b30 l c h);
+  --c-text: oklch(from #59666b l c h);
+  --c-muted: oklch(from #59666b l c h);
+  --c-button-bg: oklch(from #0f4c5c l c h);
   --c-button-text: #ffffff;
-  --c-header-bg: #ffffff;
-  --c-footer-bg: #075e68;
-  --c-footer-text: #ffffff;
-  --c-border: #e3eaed;
+  --c-header-bg: oklch(from #faf9f6 l c h);
+  --c-footer-bg: oklch(from #163a43 l c h);
+  --c-footer-text: oklch(from #f8fafa l c h);
+  --c-border: oklch(from #e3e8e8 l c h);
   --c-card: #ffffff;
 
   --background: var(--c-background);
@@ -87,7 +90,7 @@
   --secondary-foreground: var(--c-button-text);
   --accent: var(--c-accent);
   --accent-foreground: var(--c-secondary);
-  --muted: color-mix(in oklab, var(--c-accent) 45%, var(--c-background));
+  --muted: var(--c-alternate);
   --muted-foreground: var(--c-muted);
   --border: var(--c-border);
   --button: var(--c-button-bg);
@@ -103,8 +106,10 @@
 
 .dark {
   --c-primary: #3fbac6;
+  --c-primary-hover: #7fd4dc;
+  --c-alternate: #182a30;
   --c-secondary: #7fd4dc;
-  --c-accent: #123b40;
+  --c-accent: #c6a76b;
   --c-background: #0e171b;
   --c-heading: #eef5f7;
   --c-text: #dce6ea;
