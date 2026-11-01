@@ -8,6 +8,8 @@ export const Route = createFileRoute("/services/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Dental Services | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Explore dental treatments at M'brace: cleaning, whitening, root canal, implants, braces, crowns, pediatric and cosmetic dentistry." },
       { property: "og:title", content: "Dental Services at M'brace, Bhiwandi" },

@@ -14,6 +14,8 @@ import { ContactDetails, PageHeader } from "@/components/site/site-ui";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Contact | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Find M'brace Multi Speciality Dental Clinic near Dhange Hospital, Bhiwandi. Send us a message or get directions." },
       { property: "og:title", content: "Contact M'brace Dental Clinic" },

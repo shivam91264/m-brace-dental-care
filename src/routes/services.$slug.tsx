@@ -9,11 +9,14 @@ export const Route = createFileRoute("/services/$slug")({
   loader: async ({ context, params }) => {
     const s = await context.queryClient.ensureQueryData(serviceQuery(params.slug));
     if (!s) throw notFound();
-    return { title: s.title, desc: s.short_description };
+    return { title: s.title, desc: s.short_description, image: s.image_url };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
+          { name: "twitter:card", content: "summary_large_image" },
+          ...(loaderData.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : []),
+          { property: "og:type", content: "website" },
           { title: `${loaderData.title} in Bhiwandi | M'brace Dental Clinic` },
           { name: "description", content: loaderData.desc },
           { property: "og:title", content: `${loaderData.title} | M'brace Dental Clinic` },

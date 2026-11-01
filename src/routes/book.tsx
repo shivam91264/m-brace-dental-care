@@ -18,6 +18,8 @@ export const Route = createFileRoute("/book")({
   loader: ({ context: { queryClient: q } }) => Promise.all([q.ensureQueryData(servicesQuery), q.ensureQueryData(dentistsQuery)]),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Book an Appointment | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Request a dental appointment online at M'brace Multi Speciality Dental Clinic." },
       { property: "og:title", content: "Book an Appointment | M'brace Dental Clinic" },

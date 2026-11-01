@@ -9,11 +9,13 @@ export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ context, params }) => {
     const p = await context.queryClient.ensureQueryData(postQuery(params.slug));
     if (!p) throw notFound();
-    return { title: p.title, desc: p.excerpt };
+    return { title: p.title, desc: p.excerpt, image: p.cover_image };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
+          { name: "twitter:card", content: "summary_large_image" },
+          ...(loaderData.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : []),
           { title: `${loaderData.title} | M'brace Dental Blog` },
           { name: "description", content: loaderData.desc },
           { property: "og:title", content: loaderData.title },
