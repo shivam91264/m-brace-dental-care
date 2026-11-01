@@ -10,6 +10,11 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
+      { name: "description", content: "Clinic appointments and staff overview at M'brace." },
+      { property: "og:title", content: "Staff Overview | M'brace Dental Clinic" },
+      { property: "og:description", content: "Clinic appointments and staff overview." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Staff Dashboard | M'brace Dental Clinic" },
       { name: "robots", content: "noindex" },
     ],

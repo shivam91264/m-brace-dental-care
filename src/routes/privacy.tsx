@@ -5,6 +5,8 @@ import { PageHeader, Paragraphs } from "@/components/site/site-ui";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Privacy Policy | M'brace Dental Clinic" },
       { name: "description", content: "How M'brace Multi Speciality Dental Clinic collects, uses and protects your information." },
       { property: "og:title", content: "Privacy Policy | M'brace Dental Clinic" },

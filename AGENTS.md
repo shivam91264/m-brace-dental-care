@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep all appearance roles, including primary hover, card and alternate-section backgrounds, in the shared editable palette and CSS tokens so saved themes consistently control public and staff pages.
+- Public testimonial display and submission share the homepage section; the legacy testimonials URL redirects there to preserve existing links.

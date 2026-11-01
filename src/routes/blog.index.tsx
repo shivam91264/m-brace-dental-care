@@ -8,6 +8,8 @@ export const Route = createFileRoute("/blog/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Dental Health Blog | M'brace Dental Clinic" },
       { name: "description", content: "Practical dental health tips and clinic news from M'brace Multi Speciality Dental Clinic." },
       { property: "og:title", content: "Blog | M'brace Dental Clinic" },

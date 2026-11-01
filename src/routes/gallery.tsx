@@ -10,6 +10,8 @@ export const Route = createFileRoute("/gallery")({
   loader: ({ context }) => context.queryClient.ensureQueryData(galleryQuery),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Gallery | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Photos of our clinic, team, facilities and consented before-and-after treatment results." },
       { property: "og:title", content: "Clinic Gallery | M'brace Dental Clinic" },

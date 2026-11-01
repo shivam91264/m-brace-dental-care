@@ -9,6 +9,8 @@ export const Route = createFileRoute("/dentists")({
   loader: ({ context }) => context.queryClient.ensureQueryData(dentistsQuery),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Our Dentists | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Meet the dentists at M'brace Multi Speciality Dental Clinic in Bhiwandi." },
       { property: "og:title", content: "Our Dentists | M'brace Dental Clinic" },

@@ -10,6 +10,8 @@ export const Route = createFileRoute("/about")({
   loader: ({ context: { queryClient: q } }) => Promise.all([q.ensureQueryData(dentistsQuery), q.ensureQueryData(galleryQuery), q.ensureQueryData(faqsQuery)]),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "About Us | M'brace Dental Clinic Bhiwandi" },
       { name: "description", content: "Learn about M'brace Multi Speciality Dental Clinic — our mission, approach, hygiene standards and team." },
       { property: "og:title", content: "About M'brace Multi Speciality Dental Clinic" },
