@@ -7,6 +7,7 @@ import { dentistsQuery, faqsQuery, galleryQuery, servicesQuery, testimonialsQuer
 import { ContactDetails, SectionTitle } from "@/components/site/site-ui";
 import { DentistCard, ServiceCard } from "@/components/site/cards";
 import { TestimonialCarousel } from "@/components/site/TestimonialCarousel";
+import { TestimonialForm } from "@/components/site/TestimonialForm";
 
 export const Route = createFileRoute("/")({
   loader: ({ context: { queryClient: q } }) =>
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Gentle, modern multi speciality dental care in Bhiwandi — cleanings, root canals, implants, braces and more. Book your appointment online." },
       { property: "og:title", content: "M'brace Multi Speciality Dental Clinic, Bhiwandi" },
       { property: "og:description", content: "Confident smiles begin with exceptional care. Book a dental appointment online." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -68,7 +71,7 @@ function Home() {
         <section className="container-page pb-6">
           <div className="grid gap-4 sm:grid-cols-3">
             {content.highlights.map((h, i) => {
-              const Icon = icons[i % icons.length]!;
+               const Icon = icons[i % icons.length] ?? Sparkles;
               return (
                 <div key={i} className="card-surface flex items-center gap-4 p-5">
                   <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"><Icon className="size-5" /></span>
@@ -129,13 +132,14 @@ function Home() {
         </section>
       )}
 
-      {show("testimonials") && homeTestimonials.length > 0 && (
-        <section className="section-y bg-muted">
+      {show("testimonials") && (
+        <section id="testimonials" className="section-y scroll-mt-24 bg-muted">
           <div className="container-page">
-            <SectionTitle eyebrow="Patient stories" title="What our patients say" center />
+            <SectionTitle eyebrow="Patient stories" title="Testimonials" center />
             <div className="mt-10">
-              <TestimonialCarousel items={homeTestimonials} autoplay={content.carousel?.autoplay !== false} interval={content.carousel?.interval ?? 6} />
+              {homeTestimonials.length > 0 ? <TestimonialCarousel items={homeTestimonials} autoplay={content.carousel?.autoplay !== false} interval={content.carousel?.interval ?? 6} /> : <p className="text-center text-muted-foreground">No patient reviews published yet.</p>}
             </div>
+            <div className="mt-10"><TestimonialForm /></div>
           </div>
         </section>
       )}

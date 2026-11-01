@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 type Item = { id: string; name: string; content: string; rating: number | null; review_date: string | null };
 
@@ -57,7 +58,7 @@ export function TestimonialCarousel({ items, autoplay = true, interval = 6 }: { 
             {t.rating ? (
               <div className="mt-3 flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
                 {Array.from({ length: 5 }).map((_, s) => (
-                  <Star key={s} className={s < t.rating! ? "size-4 fill-warning text-warning" : "size-4 text-border"} aria-hidden />
+                  <Star key={s} className={s < (t.rating ?? 0) ? "size-4 fill-warning text-warning" : "size-4 text-border"} aria-hidden />
                 ))}
               </div>
             ) : null}
@@ -71,8 +72,8 @@ export function TestimonialCarousel({ items, autoplay = true, interval = 6 }: { 
       </div>
       {items.length > 1 && (
         <div className="mt-4 flex justify-center gap-3">
-          <button type="button" onClick={() => step(-1)} aria-label="Previous testimonial" className="grid size-11 place-items-center rounded-full border border-border bg-card hover:bg-accent"><ChevronLeft className="size-5" /></button>
-          <button type="button" onClick={() => step(1)} aria-label="Next testimonial" className="grid size-11 place-items-center rounded-full border border-border bg-card hover:bg-accent"><ChevronRight className="size-5" /></button>
+          <Button type="button" variant="outline" size="icon" onClick={() => step(-1)} aria-label="Previous testimonial"><ChevronLeft className="size-5" /></Button>
+          <Button type="button" variant="outline" size="icon" onClick={() => step(1)} aria-label="Next testimonial"><ChevronRight className="size-5" /></Button>
         </div>
       )}
     </div>
