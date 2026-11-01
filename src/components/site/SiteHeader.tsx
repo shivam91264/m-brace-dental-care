@@ -7,11 +7,11 @@ import { useSite } from "@/lib/queries";
 import { Logo, ThemeToggle } from "./site-ui";
 
 export const NAV = [
+  { key: "home", to: "/", label: "Home" },
   { key: "about", to: "/about", label: "About" },
   { key: "services", to: "/services", label: "Services" },
   { key: "dentists", to: "/dentists", label: "Dentists" },
   { key: "gallery", to: "/gallery", label: "Gallery" },
-  { key: "testimonials", to: "/testimonials", label: "Reviews" },
   { key: "blog", to: "/blog", label: "Blog" },
   { key: "contact", to: "/contact", label: "Contact" },
 ] as const;
@@ -19,7 +19,7 @@ export const NAV = [
 export function SiteHeader() {
   const { content } = useSite();
   const [open, setOpen] = useState(false);
-  const items = NAV.filter((n) => content.nav?.[n.key] !== false);
+  const items = NAV.filter((n) => n.key === "home" || content.nav?.[n.key] !== false);
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-header/90 backdrop-blur">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded-md focus:bg-card focus:px-3 focus:py-2">Skip to content</a>
@@ -27,7 +27,7 @@ export function SiteHeader() {
         <Logo />
         <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
           {items.map((n) => (
-            <Link key={n.key} to={n.to} className="rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary" activeProps={{ className: "text-primary" }}>
+            <Link key={n.key} to={n.to} activeOptions={{ exact: n.to === "/" }} className="rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:underline focus-visible:underline underline-offset-8 decoration-2" activeProps={{ className: "text-primary" }}>
               {n.label}
             </Link>
           ))}
@@ -42,9 +42,8 @@ export function SiteHeader() {
             <SheetContent side="right" className="w-[85vw] max-w-sm bg-card">
               <SheetTitle className="sr-only">Menu</SheetTitle>
               <nav aria-label="Mobile" className="mt-8 flex flex-col gap-1">
-                <Link to="/" onClick={() => setOpen(false)} className="rounded-lg px-3 py-3 text-base font-medium hover:bg-accent">Home</Link>
                 {items.map((n) => (
-                  <Link key={n.key} to={n.to} onClick={() => setOpen(false)} className="rounded-lg px-3 py-3 text-base font-medium hover:bg-accent" activeProps={{ className: "text-primary" }}>
+                  <Link key={n.key} to={n.to} activeOptions={{ exact: n.to === "/" }} onClick={() => setOpen(false)} className="rounded-lg px-3 py-3 text-base font-medium hover:bg-accent hover:underline focus-visible:underline underline-offset-8 decoration-2" activeProps={{ className: "text-primary" }}>
                     {n.label}
                   </Link>
                 ))}

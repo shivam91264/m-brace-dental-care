@@ -231,7 +231,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
             {m.fields.map((f) => (
               <div key={f.key} className="space-y-1.5">
                 {f.type !== "checkbox" && <Label htmlFor={f.key}>{f.label}{f.required ? " *" : ""}</Label>}
-                <FieldInput f={f} row={editing === "new" ? null : editing} />
+                <FieldInput f={f} row={editing === "new" ? (m.table === "testimonials" ? { status: "pending", sort_order: 0 } : null) : editing} />
               </div>
             ))}
             <div className="flex justify-end gap-2 pt-2">
@@ -272,7 +272,7 @@ function ContentSection() {
   const [busy, setBusy] = useState(false);
 
   const SECTION_KEYS = ["highlights", "services", "about", "dentists", "why", "testimonials", "gallery", "faq", "contact"];
-  const NAV_KEYS = ["about", "services", "dentists", "gallery", "testimonials", "blog", "contact"];
+  const NAV_KEYS = ["about", "services", "dentists", "gallery", "blog", "contact"];
 
   async function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
