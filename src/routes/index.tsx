@@ -14,9 +14,11 @@ export const Route = createFileRoute("/")({
   loader: ({ context: { queryClient: q } }) => {
     // Start the lower-page reads in parallel without blocking the opening
     // content. Suspense streams those sections when their data is ready.
-    for (const options of [servicesQuery, dentistsQuery, testimonialsQuery, galleryQuery, faqsQuery]) {
-      void q.prefetchQuery(options);
-    }
+    void q.prefetchQuery(servicesQuery);
+    void q.prefetchQuery(dentistsQuery);
+    void q.prefetchQuery(testimonialsQuery);
+    void q.prefetchQuery(galleryQuery);
+    void q.prefetchQuery(faqsQuery);
   },
   head: () => ({
     meta: [
