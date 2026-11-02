@@ -4,6 +4,7 @@ export const accountQuery = queryOptions({queryKey:['account'],queryFn:async()=>
  const {data:{user},error}=await supabase.auth.getUser();
  if(error||!user) return null;
  const [p,r]=await Promise.all([supabase.from('profiles').select('*').eq('id',user.id).maybeSingle(),supabase.from('user_roles').select('role').eq('user_id',user.id)]);
+ if(p.error) throw p.error;
  if(r.error) throw r.error;
  return {user,profile:p.data,roles:(r.data??[]).map(x=>x.role)};
-},staleTime:0});
+},staleTime:30_000});

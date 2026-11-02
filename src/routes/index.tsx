@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { ArrowRight, CalendarCheck, CheckCircle2, MapPin, Navigation, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -10,8 +11,15 @@ import { TestimonialCarousel } from "@/components/site/TestimonialCarousel";
 import { TestimonialForm } from "@/components/site/TestimonialForm";
 
 export const Route = createFileRoute("/")({
-  loader: ({ context: { queryClient: q } }) =>
-    Promise.all([q.ensureQueryData(servicesQuery), q.ensureQueryData(dentistsQuery), q.ensureQueryData(testimonialsQuery), q.ensureQueryData(galleryQuery), q.ensureQueryData(faqsQuery)]),
+  loader: ({ context: { queryClient: q } }) => {
+    // Start the lower-page reads in parallel without blocking the opening
+    // content. Suspense streams those sections when their data is ready.
+    void q.prefetchQuery(servicesQuery);
+    void q.prefetchQuery(dentistsQuery);
+    void q.prefetchQuery(testimonialsQuery);
+    void q.prefetchQuery(galleryQuery);
+    void q.prefetchQuery(faqsQuery);
+  },
   head: () => ({
     meta: [
       { title: "M'brace Dental Clinic Bhiwandi | Confident Smiles Begin With Exceptional Care" },
@@ -23,22 +31,14 @@ export const Route = createFileRoute("/")({
     ],
   }),
   component: Home,
+  errorComponent: () => <p role="alert" className="container-page py-12">The homepage couldn't load. Please refresh to try again.</p>,
+  notFoundComponent: () => <p className="container-page py-12">Page not found.</p>,
 });
 
 const icons = [Sparkles, ShieldCheck, MapPin, CheckCircle2];
 
 function Home() {
   const { clinic, content } = useSite();
-  const show = (k: string) => content.sections?.[k] !== false;
-  const { data: services } = useSuspenseQuery(servicesQuery);
-  const { data: dentists } = useSuspenseQuery(dentistsQuery);
-  const { data: testimonials } = useSuspenseQuery(testimonialsQuery);
-  const { data: gallery } = useSuspenseQuery(galleryQuery);
-  const { data: faqs } = useSuspenseQuery(faqsQuery);
-  const featured = services.filter((s) => s.featured).slice(0, 6);
-  const featuredServices = featured.length ? featured : services.slice(0, 6);
-  const homeTestimonials = testimonials.some((t) => t.featured) ? testimonials.filter((t) => t.featured) : testimonials;
-  const homeDentists = dentists.filter((d) => d.featured).slice(0, 3);
 
   return (
     <>
@@ -66,6 +66,29 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={<div className="container-page py-12 text-muted-foreground" role="status">Loading clinic information…</div>}>
+        <HomeSections />
+      </Suspense>
+    </>
+  );
+}
+
+function HomeSections() {
+  const { clinic, content } = useSite();
+  const show = (k: string) => content.sections?.[k] !== false;
+  const { data: services } = useSuspenseQuery(servicesQuery);
+  const { data: dentists } = useSuspenseQuery(dentistsQuery);
+  const { data: testimonials } = useSuspenseQuery(testimonialsQuery);
+  const { data: gallery } = useSuspenseQuery(galleryQuery);
+  const { data: faqs } = useSuspenseQuery(faqsQuery);
+  const featured = services.filter((s) => s.featured).slice(0, 6);
+  const featuredServices = featured.length ? featured : services.slice(0, 6);
+  const homeTestimonials = testimonials.some((t) => t.featured) ? testimonials.filter((t) => t.featured) : testimonials;
+  const homeDentists = dentists.filter((d) => d.featured).slice(0, 3);
+
+  return (
+    <>
 
       {show("highlights") && content.highlights?.length > 0 && (
         <section className="container-page pb-6">

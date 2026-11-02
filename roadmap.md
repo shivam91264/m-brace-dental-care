@@ -1,5 +1,6 @@
 # Website completion
-- [ ] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
+- [x] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
+- [x] Reduce repeated staff loading and homepage blocking reads; verify speed and authenticated navigation.
 - [x] Staff sign-in, registration, recovery and account pages.
 - [x] Protected management pages, editing, uploads and deletion confirmations.
 - [x] Staff permissions, user approval, scheduling and saved appearance settings.

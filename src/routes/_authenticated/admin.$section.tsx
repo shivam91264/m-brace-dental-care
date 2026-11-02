@@ -22,9 +22,14 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/admin/$section")({
-  head: () => ({
+  head: ({ params }) => ({
     meta: [
-      { title: "Staff Dashboard | M'brace Dental Clinic" },
+      { title: `${MODULES[params.section]?.title ?? params.section.replaceAll("-", " ")} | M'brace Staff` },
+      { name: "description", content: "Secure clinic management for M'brace staff." },
+      { property: "og:title", content: `${MODULES[params.section]?.title ?? params.section} | M'brace Staff` },
+      { property: "og:description", content: "Secure clinic management for M'brace staff." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -135,6 +140,25 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
     !search || Object.values(r).some((v) => String(v ?? "").toLowerCase().includes(search.toLowerCase())),
   );
 
+  async function refreshModule() {
+    // Only the changed public collection needs refreshing; private edits do
+    // not force settings, photos and other unrelated pages to reload.
+    const publicCollections: Record<string, string> = {
+      services: "services", dentists: "dentists", testimonials: "testimonials",
+      gallery_images: "gallery", faqs: "faqs", blog_posts: "posts",
+    };
+    const collection = publicCollections[m.table];
+    await Promise.all([
+      q.invalidateQueries({ queryKey: ["admin", m.table] }),
+      q.invalidateQueries({ queryKey: ["admin", "stats"] }),
+      ...(m.table === "appointments" ? [q.invalidateQueries({ queryKey: ["admin", "recent-appointments"] })] : []),
+      ...(m.table === "profiles" ? [q.invalidateQueries({ queryKey: ["account"] })] : []),
+      ...(collection ? [q.invalidateQueries({ queryKey: ["public", collection] })] : []),
+      ...(m.table === "services" ? [q.invalidateQueries({ queryKey: ["public", "service"] })] : []),
+      ...(m.table === "blog_posts" ? [q.invalidateQueries({ queryKey: ["public", "post"] })] : []),
+    ]);
+  }
+
   async function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);
@@ -155,8 +179,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
       }
       toast.success("Saved");
       setEditing(null);
-      await q.invalidateQueries({ queryKey: ["admin", m.table] });
-      await q.invalidateQueries({ queryKey: ["public"] });
+      await refreshModule();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -172,8 +195,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
       if (error) throw error;
       toast.success("Deleted");
       setDeleting(null);
-      await q.invalidateQueries({ queryKey: ["admin", m.table] });
-      await q.invalidateQueries({ queryKey: ["public"] });
+      await refreshModule();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Delete failed");
     } finally {
@@ -307,7 +329,7 @@ function ContentSection() {
       const r2 = await supabase.from("settings").upsert({ key: "content", value: nextContent } as never);
       if (r2.error) throw r2.error;
       toast.success("Website content saved");
-      await q.invalidateQueries({ queryKey: ["public"] });
+      await q.invalidateQueries({ queryKey: ["public", "settings"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -417,7 +439,7 @@ function AppearanceSection() {
       const { error } = await supabase.from("settings").upsert({ key: "theme", value: sanitizeTheme(theme) } as never);
       if (error) throw error;
       toast.success("Appearance saved");
-      await q.invalidateQueries({ queryKey: ["public"] });
+      await q.invalidateQueries({ queryKey: ["public", "settings"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -534,7 +556,7 @@ function ScheduleSection() {
       const { error } = await supabase.from("settings").upsert({ key: "booking", value: next } as never);
       if (error) throw error;
       toast.success("Opening hours saved");
-      await q.invalidateQueries({ queryKey: ["public"] });
+      await q.invalidateQueries({ queryKey: ["public", "settings"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
