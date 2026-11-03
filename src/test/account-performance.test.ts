@@ -1,15 +1,16 @@
 import { QueryClient } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ getUser: vi.fn(), from: vi.fn() }));
+const mocks = vi.hoisted(() => ({ getUser: vi.fn(), getSession: vi.fn(), from: vi.fn() }));
 vi.mock("@/integrations/supabase/client", () => ({
-  supabase: { auth: { getUser: mocks.getUser }, from: mocks.from },
+  supabase: { auth: { getUser: mocks.getUser, getSession: mocks.getSession }, from: mocks.from },
 }));
 import { accountQuery } from "@/lib/account";
 
 describe("Staff account request reuse", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.getSession.mockResolvedValue({ data: { session: { user: { id: "staff-id" } } } });
     mocks.getUser.mockResolvedValue({ data: { user: { id: "staff-id" } }, error: null });
     mocks.from.mockImplementation((table: string) => ({
       select: () => ({
