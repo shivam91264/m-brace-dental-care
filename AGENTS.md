@@ -11,5 +11,5 @@
 
 - Keep all appearance roles, including primary hover, card and alternate-section backgrounds, in the shared editable palette and CSS tokens so saved themes consistently control public and staff pages.
 - Public testimonial display and submission share the homepage section; the legacy testimonials URL redirects there to preserve existing links.
-- Keep the managed auth gate intact; share short-lived account and staff-query caches, invalidate changed collections after writes, and clear private caches on sign-out to avoid redundant requests without changing database authorization.
+- The sign-in gate, staff guard and shell share one verified account query (session id for parallel profile/role reads, verified by getUser); staff lists prefetch on link intent, invalidate changed collections after writes, and private caches clear on sign-out. Database RLS stays the real authorization.
 - Start homepage secondary reads in parallel and render them behind Suspense so the opening content does not wait for lower-page data.

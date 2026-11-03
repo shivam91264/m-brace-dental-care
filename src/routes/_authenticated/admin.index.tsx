@@ -37,6 +37,7 @@ function Overview() {
 
   const { data: stats } = useQuery({
     queryKey: ["admin", "stats", today],
+    staleTime: 60_000,
     queryFn: async () => {
       const [total, todayCount, pending, confirmed, patients, enquiries, pendingUsers, pendingReviews] = await Promise.all([
         count("appointments"),
@@ -54,6 +55,7 @@ function Overview() {
 
   const { data: recent } = useQuery({
     queryKey: ["admin", "recent-appointments"],
+    staleTime: 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("appointments")

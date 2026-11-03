@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useRef, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Pencil, Plus, Trash2, Upload } from "lucide-react";
@@ -21,6 +21,17 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+// Shared so the route can start loading a list when staff hover or tap its link.
+const moduleRowsQuery = (table: Module["table"]) => queryOptions({
+  queryKey: ["admin", table],
+  queryFn: async () => {
+    const { data, error } = await supabase.from(table).select("*").order("created_at", { ascending: false }).limit(300);
+    if (error) throw error;
+    return (data ?? []) as Row[];
+  },
+  staleTime: 60_000,
+});
+
 export const Route = createFileRoute("/_authenticated/admin/$section")({
   head: ({ params }) => ({
     meta: [
@@ -33,7 +44,14 @@ export const Route = createFileRoute("/_authenticated/admin/$section")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: ({ context, params }) => {
+    const m = MODULES[params.section];
+    // Not awaited: the page opens immediately and the list fills in as it arrives.
+    if (m) void context.queryClient.prefetchQuery(moduleRowsQuery(m.table));
+  },
   component: AdminSection,
+  errorComponent: ({ error }) => <p role="alert" className="card-surface p-8 text-muted-foreground">{error instanceof Error ? error.message : "Something went wrong."}</p>,
+  notFoundComponent: () => <p className="card-surface p-8 text-muted-foreground">Section not found.</p>,
 });
 
 function NoAccess() {
@@ -127,14 +145,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
   const [deleting, setDeleting] = useState<Row | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const { data: rows } = useQuery({
-    queryKey: ["admin", m.table],
-    queryFn: async () => {
-      const { data, error } = await supabase.from(m.table).select("*").order("created_at", { ascending: false }).limit(300);
-      if (error) throw error;
-      return (data ?? []) as Row[];
-    },
-  });
+  const { data: rows } = useQuery(moduleRowsQuery(m.table));
 
   const filtered = (rows ?? []).filter((r) =>
     !search || Object.values(r).some((v) => String(v ?? "").toLowerCase().includes(search.toLowerCase())),
