@@ -76,6 +76,42 @@ developer:
 
 Full guide: https://docs.lovable.dev/tips-tricks/self-hosting
 
+## 6a. Deploying to Vercel
+
+1. **Push the code to GitHub**: in Lovable click **GitHub → Connect to GitHub**
+   and create/select a repository.
+2. **Import into Vercel**: at https://vercel.com click **Add New… → Project**,
+   pick the repository and click **Import**.
+3. **Build settings**:
+   - Framework Preset: **Other**
+   - Root Directory: `./`
+   - Install Command: `bun install` (or `npm install`)
+   - Build Command: `bun run build` (or `npm run build`)
+   - Output Directory: leave empty (the build writes `.vercel/output` automatically
+     when `NITRO_PRESET=vercel` is set)
+4. **Environment variables** (Production, Preview and Development):
+
+   | Variable | Value |
+   | --- | --- |
+   | `NITRO_PRESET` | `vercel` |
+   | `VITE_SUPABASE_URL` | your backend URL (same as in `.env`) |
+   | `VITE_SUPABASE_PUBLISHABLE_KEY` | your publishable key (same as in `.env`) |
+   | `VITE_SUPABASE_PROJECT_ID` | your project id (same as in `.env`) |
+   | `SUPABASE_URL` | same as `VITE_SUPABASE_URL` |
+   | `SUPABASE_PUBLISHABLE_KEY` | same as `VITE_SUPABASE_PUBLISHABLE_KEY` |
+
+   Only the public/publishable values are needed. Never add private service keys.
+5. **Node.js version**: Project Settings → General → Node.js Version → **20.x or 22.x**.
+6. Click **Deploy**. Vercel builds the site and gives you a live URL.
+7. **Custom domain**: Vercel → Project → Settings → Domains → add your domain and
+   follow the DNS instructions.
+8. **Password-reset links**: add your Vercel URL/domain as an allowed redirect URL
+   for sign-in (ask in the Lovable chat to add it), otherwise reset links point to
+   the old address.
+
+Every push to the GitHub repository's main branch redeploys automatically.
+Content edited in the staff dashboard updates instantly without redeploying.
+
 ## 7. Checklist before announcing the site
 
 - [ ] Real phone, email and opening hours entered
