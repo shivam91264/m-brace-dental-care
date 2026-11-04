@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { accountQuery } from '@/lib/account';
 import { requestPasswordRecovery, updateRecoveredPassword } from '@/lib/password-recovery';
+import { ForgotPasswordForm } from '@/components/admin/ForgotPasswordForm';
 export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
  const account=useQuery({...accountQuery,enabled:mode==='login'}),q=useQueryClient(),navigate=useNavigate();
@@ -23,6 +24,7 @@ export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  if(mode==='reset'){await updateRecoveredPassword(password);setMessage('Password updated. You can now sign in.');}
  }catch(err){toast.error(err instanceof Error?err.message:'Unable to continue. Please try again.');}finally{setBusy(false);}}
  const title={login:'Staff sign in',register:'Request staff access',forgot:'Forgot password',reset:'Set a new password'}[mode];
+ if(mode==='forgot') return <ForgotPasswordForm />;
  return <section className="container-page max-w-lg py-14"><h1 className="text-3xl">{title}</h1>{message&&<p role="status" className="mt-5 rounded-lg bg-accent p-4 text-accent-foreground">{message}</p>}
  {mode==='login'&&account.data?<div className="mt-6 space-y-4"><p>{account.data.profile?.full_name} · {account.data.profile?.status}</p>{account.data.profile?.status==='approved'&&account.data.roles.length>0&&<Button asChild><Link to="/admin">Open dashboard</Link></Button>}{setup.data&&<div className="rounded-lg border border-border bg-card p-4"><p className="text-sm text-muted-foreground">No Super Admin exists yet. As the first staff account, you can claim this role once.</p><Button className="mt-3" onClick={claimSetup} disabled={busy}>{busy?'Setting up…':'Become the Super Admin'}</Button></div>}<Button variant="outline" onClick={signOut}>Sign out</Button></div>:<form onSubmit={submit} className="mt-6 space-y-5">
  {mode==='register'&&<div><Label htmlFor="name">Full name</Label><Input id="name" name="name" required maxLength={120} autoComplete="name" /></div>}

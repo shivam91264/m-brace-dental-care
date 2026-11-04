@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mocks = vi.hoisted(() => ({ resetPasswordForEmail: vi.fn(), getUser: vi.fn(), updateUser: vi.fn() }));
+const mocks = vi.hoisted(() => ({ resetPasswordForEmail: vi.fn(), verifyOtp: vi.fn(), getUser: vi.fn(), updateUser: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: mocks } }));
-import { rememberRecoveryUser, requestPasswordRecovery, updateRecoveredPassword } from '@/lib/password-recovery';
+import { rememberRecoveryUser, requestPasswordRecovery, updateRecoveredPassword, verifyRecoveryCode } from '@/lib/password-recovery';
 
 describe('Admin password recovery', () => {
   beforeEach(() => {
@@ -16,6 +16,27 @@ describe('Admin password recovery', () => {
   it('requests reset email for the new admin address with the public reset destination', async () => {
     await requestPasswordRecovery('robo6oy01@gmail.com', 'https://clinic.example');
     expect(mocks.resetPasswordForEmail).toHaveBeenCalledWith('robo6oy01@gmail.com', { redirectTo: 'https://clinic.example/reset-password' });
+  });
+
+  it('requests a fresh recovery email on each resend and clears previous recovery access', async () => {
+    rememberRecoveryUser('admin');
+    await requestPasswordRecovery('robo6oy01@gmail.com', 'https://clinic.example');
+    await requestPasswordRecovery('robo6oy01@gmail.com', 'https://clinic.example');
+    expect(mocks.resetPasswordForEmail).toHaveBeenCalledTimes(2);
+    expect(sessionStorage.getItem('password-recovery')).toBeNull();
+  });
+
+  it('verifies an emailed recovery code before granting password reset access', async () => {
+    mocks.verifyOtp.mockResolvedValue({ data: { user: { id: 'admin' }, session: {} }, error: null });
+    await verifyRecoveryCode('robo6oy01@gmail.com', '123456');
+    expect(mocks.verifyOtp).toHaveBeenCalledWith({ email: 'robo6oy01@gmail.com', token: '123456', type: 'recovery' });
+    expect(sessionStorage.getItem('password-recovery')).toBe('admin');
+  });
+
+  it('does not grant access for invalid or expired codes', async () => {
+    mocks.verifyOtp.mockResolvedValue({ data: {}, error: new Error('Code expired') });
+    await expect(verifyRecoveryCode('robo6oy01@gmail.com', '123456')).rejects.toThrow('Code expired');
+    expect(sessionStorage.getItem('password-recovery')).toBeNull();
   });
 
   it('reports a rejected email request instead of showing success', async () => {
