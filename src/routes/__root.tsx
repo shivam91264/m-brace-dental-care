@@ -19,6 +19,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { rememberRecoveryUser, clearRecoveryUser } from "@/lib/password-recovery";
 
 function NotFoundComponent() {
   return (
@@ -128,7 +129,13 @@ function RootComponent() {
   const isAdmin = pathname.startsWith("/admin");
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" && session?.user) {
+        rememberRecoveryUser(session.user.id);
+        void router.navigate({ to: "/reset-password" });
+        return;
+      }
+      if (event === "SIGNED_OUT") clearRecoveryUser();
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();

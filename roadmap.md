@@ -1,4 +1,6 @@
 # Website completion
+- [x] Change the Super Admin login email, preserving password and role.
+- [ ] Repair password-reset error handling and recovery-session handling; test the flow.
 - [x] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
 - [x] Reduce repeated staff loading and homepage blocking reads; verify speed and authenticated navigation.
 - [x] Staff pages: shared sign-in check, preload on hover, loading bar; deployment guide (DEPLOYMENT.md).
@@ -10,4 +12,4 @@
 - [x] Public booking verified end to end; double-booking prevented by the database.
 - [x] Public pages, private access and tests verified.
 - [ ] Owner to enter real contact details, confirmed weekly hours and dentist profiles in the dashboard.
-- [ ] Email delivery for password-reset links needs a configured email sender (works once email is set up).
+- [ ] Confirm password-reset email arrival in the owner's inbox; default authentication sender is available without a custom domain.

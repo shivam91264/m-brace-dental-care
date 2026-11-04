@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { accountQuery } from '@/lib/account';
+import { requestPasswordRecovery, updateRecoveredPassword } from '@/lib/password-recovery';
 export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
  const account=useQuery({...accountQuery,enabled:mode==='login'}),q=useQueryClient(),navigate=useNavigate();
@@ -18,8 +19,8 @@ export function AuthForm({mode}:{mode:'login'|'register'|'forgot'|'reset'}){
  setBusy(true);try{
  if(mode==='login'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;await q.invalidateQueries({queryKey:['account']});const a=await q.fetchQuery(accountQuery);if(a?.profile?.status==='approved'&&a.roles.length)navigate({to:'/admin'});else setMessage('Your account is awaiting approval. Please contact the clinic owner.');}
  if(mode==='register'){const {error}=await supabase.auth.signUp({email,password,options:{data:{full_name:String(d.get('name')??'')},emailRedirectTo:window.location.origin+'/auth'}});if(error)throw error;setMessage('Check your email to confirm your account. Staff access requires approval from the clinic owner.');}
- if(mode==='forgot'){await supabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/reset-password'});setMessage('If an account exists, a recovery email has been requested. Please check your inbox.');}
- if(mode==='reset'){const hash=new URLSearchParams(window.location.hash.slice(1));if(hash.get('type')!=='recovery'&&!sessionStorage.getItem('password-recovery'))throw new Error('Open the recovery link from your email first.');const {error}=await supabase.auth.updateUser({password});if(error)throw error;sessionStorage.removeItem('password-recovery');setMessage('Password updated. You can now sign in.');}
+ if(mode==='forgot'){await requestPasswordRecovery(email,window.location.origin);setMessage('If an account exists, a password reset email has been requested. Check your inbox and spam folder.');}
+ if(mode==='reset'){await updateRecoveredPassword(password);setMessage('Password updated. You can now sign in.');}
  }catch(err){toast.error(err instanceof Error?err.message:'Unable to continue. Please try again.');}finally{setBusy(false);}}
  const title={login:'Staff sign in',register:'Request staff access',forgot:'Forgot password',reset:'Set a new password'}[mode];
  return <section className="container-page max-w-lg py-14"><h1 className="text-3xl">{title}</h1>{message&&<p role="status" className="mt-5 rounded-lg bg-accent p-4 text-accent-foreground">{message}</p>}
