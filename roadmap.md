@@ -1,5 +1,6 @@
 # Website completion
-- [ ] Replace password recovery links with email-code verification and resend; configure the recovery email to show its code.
+- [x] Add email-code verification and resend controls; recovery helper tests and mobile layout pass.
+- [ ] Configure the recovery email to show its code and verify receipt/reset end to end; blocked on owner sender-domain setup.
 - [x] Change the Super Admin login email, preserving password and role.
 - [x] Repair password-reset error handling and recovery-session handling; tests pass, real email request accepted, admin access verified.
 - [x] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
@@ -13,4 +14,4 @@
 - [x] Public booking verified end to end; double-booking prevented by the database.
 - [x] Public pages, private access and tests verified.
 - [ ] Owner to enter real contact details, confirmed weekly hours and dentist profiles in the dashboard.
-- [ ] Confirm password-reset email arrival in the owner's inbox; default authentication sender is available without a custom domain.
+- [x] Owner screenshot confirms default password-reset link emails arrived; custom OTP email delivery still needs sender-domain setup.
