@@ -13,4 +13,4 @@
 - Public testimonial display and submission share the homepage section; the legacy testimonials URL redirects there to preserve existing links.
 - The sign-in gate, staff guard and shell share one verified account query (session id for parallel profile/role reads, verified by getUser); staff lists prefetch on link intent, invalidate changed collections after writes, and private caches clear on sign-out. Database RLS stays the real authorization.
 - Start homepage secondary reads in parallel and render them behind Suspense so the opening content does not wait for lower-page data.
-- Password recovery is recorded by the root auth listener and bound to the verified user ID; reset helpers propagate errors and consume the grant after success to avoid stale recovery access.
+- Password recovery uses Cloud Auth recovery-code verification or the root recovery event, bound to the verified user ID; reset helpers propagate errors and consume grants after success or resend. Cloud Auth owns code generation, expiry and single-use validation.
