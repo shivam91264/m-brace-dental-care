@@ -1,6 +1,6 @@
 # Website completion
 - [x] Change the Super Admin login email, preserving password and role.
-- [ ] Repair password-reset error handling and recovery-session handling; test the flow.
+- [x] Repair password-reset error handling and recovery-session handling; tests pass, real email request accepted, admin access verified.
 - [x] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
 - [x] Reduce repeated staff loading and homepage blocking reads; verify speed and authenticated navigation.
 - [x] Staff pages: shared sign-in check, preload on hover, loading bar; deployment guide (DEPLOYMENT.md).
