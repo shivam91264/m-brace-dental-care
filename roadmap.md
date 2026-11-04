@@ -1,4 +1,5 @@
 # Website completion
+- [ ] Replace password recovery links with email-code verification and resend; configure the recovery email to show its code.
 - [x] Change the Super Admin login email, preserving password and role.
 - [x] Repair password-reset error handling and recovery-session handling; tests pass, real email request accepted, admin access verified.
 - [x] Add Home navigation and hover underlines; move public testimonials onto Home and restore staff creation.
