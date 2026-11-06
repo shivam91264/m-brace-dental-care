@@ -81,9 +81,12 @@ function FieldInput({ f, row }: { f: Field; row: Row | null }) {
     return <Textarea id={f.key} name={f.key} defaultValue={v ?? ""} required={f.required} rows={4} maxLength={8000} />;
   if (f.type === "checkbox")
     return (
-      <label className="flex items-center gap-2 text-sm">
-        <Checkbox id={f.key} name={f.key} defaultChecked={Boolean(v)} /> Enabled
-      </label>
+      <div className="space-y-1 rounded-lg border border-border bg-card p-3">
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
+          <Checkbox id={f.key} name={f.key} defaultChecked={Boolean(v)} /> {f.label}
+        </label>
+        {f.help && <p className="pl-7 text-xs leading-relaxed text-muted-foreground">{f.help}</p>}
+      </div>
     );
   if (f.options)
     return (
@@ -265,6 +268,7 @@ function ModulePage({ module: m, roles }: { module: Module; roles: string[] }) {
               <div key={f.key} className="space-y-1.5">
                 {f.type !== "checkbox" && <Label htmlFor={f.key}>{f.label}{f.required ? " *" : ""}</Label>}
                 <FieldInput f={f} row={editing === "new" ? (m.table === "testimonials" ? { status: "pending", sort_order: 0 } : null) : editing} />
+                {f.type !== "checkbox" && f.help && <p className="text-xs leading-relaxed text-muted-foreground">{f.help}</p>}
               </div>
             ))}
             <div className="flex justify-end gap-2 pt-2">
